@@ -1,12 +1,12 @@
-﻿using System;
-using ver2;
+﻿using ver2;
 
 namespace Zadanie3
 {
-    public class Copier : BaseDevice
+    public class MultidimensionalDevice : BaseDevice
     {
         private Scanner _scanner = new Scanner();
         private Printer _printer = new Printer();
+        private Fax _fax = new Fax();
         public int PrintCounter
         {
             get => _printer.PrintCounter;
@@ -36,6 +36,15 @@ namespace Zadanie3
             }
         }
 
+        public void SendFax(in IDocument document, string number)
+        {
+            if (state == IDevice.State.on)
+            {
+                _fax.PowerOn();
+                _fax.SendFax(document, number);
+                _fax.PowerOff();
+            }
+        }
 
         public void Scan(out IDocument document, IDocument.FormatType formatType = IDocument.FormatType.JPG)
         {
@@ -65,6 +74,23 @@ namespace Zadanie3
                 IDocument document;
                 Scan(out document);
                 Print(document);
+            }
+        }
+        
+        public void FullService(string number)
+        {
+            if (state == IDevice.State.on)
+            {
+                IDocument document;
+                _scanner.PowerOn();
+                Scan(out document, IDocument.FormatType.JPG);
+                _scanner.PowerOff();
+                _printer.PowerOn();
+                Print(in document);
+                _printer.PowerOff();
+                _fax.PowerOn();
+                SendFax(in document, number);
+                _fax.PowerOff();
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
-using ver1;
+using ver2;
 
-namespace Zadanie1
+namespace Zadanie3
 {
     class Program
     {
